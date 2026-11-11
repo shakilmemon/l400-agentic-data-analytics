@@ -1,0 +1,4 @@
+How the CE uses this in the lab:
+The Prompt: The CE will upload this PDF to Antigravity and prompt: "Read this security policy and look at my l400_agentic_da schema. Generate the BigQuery DDL to create the Data Catalog Taxonomy, Policy Tags, and Row Level Security (CREATE ROW ACCESS POLICY) rules required to bring us into compliance."
+The Test: Once applied, the CE will test Prompts 19 and 20 from our test suite. Because the CA agent is configured to use the CE's own credentials (who is likely simulated as a 'NorthAm' analyst in the lab environment), BigQuery will flawlessly mask the emails and drop all the APAC/EMEA rows from the math!
+Does this markdown look good to go?

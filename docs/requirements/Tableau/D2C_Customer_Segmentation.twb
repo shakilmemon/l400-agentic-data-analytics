@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<workbook original-version='18.1' source-build='2023.1.0' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <datasources>
+    <datasource caption='LegacyERP_D2C' inline='true' name='federated.9z8y7x'>
+      <connection class='federated'>
+        <!-- Connection details omitted -->
+      </connection>
+      
+      <!-- STANDARD COLUMNS -->
+      <column datatype='string' name='[CUST_NUM_ID]' role='dimension' type='nominal' />
+      <column datatype='real' name='[Lifetime_Spend]' role='measure' type='quantitative' />
+      <column datatype='integer' name='[Categories_Purchased]' role='measure' type='quantitative' />
+      <column datatype='integer' name='[Reviews_L12M]' role='measure' type='quantitative' />
+      <column datatype='integer' name='[Returns_L90D]' role='measure' type='quantitative' />
+
+      <!-- CALCULATED FIELD: THE GOLDEN METRIC -->
+      <column caption='Certified Field Tester Status' datatype='boolean' name='[Calculation_123456789]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [Lifetime_Spend] &gt; 1000 AND [Categories_Purchased] &gt;= 3 AND [Reviews_L12M] &gt;= 2 AND [Returns_L90D] == 0 THEN TRUE ELSE FALSE END' />
+      </column>
+      
+    </datasource>
+  </datasources>
+</workbook>

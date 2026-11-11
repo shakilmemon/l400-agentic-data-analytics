@@ -1,0 +1,200 @@
+{
+  "dataset": {
+    "name": "l400_agentic_da",
+    "description": "This dataset provides a comprehensive view of an organization's operations, encompassing financial, sales, inventory, and human resources data. It contains detailed records of customer interactions, product information, and supply chain activities. The data supports in-depth analysis of financial performance, sales trends, inventory management, and customer behavior. It enables strategic decision-making, operational optimization, and robust reporting across various business functions. The dataset also facilitates understanding of regional performance and employee contributions."
+  },
+  "relationships": [
+    {
+      "table1": "DIST_ACCT_MSTR",
+      "table2": "GEO_REG_HIER",
+      "relationship": "DIST_ACCT_MSTR.REG_ID_CD = GEO_REG_HIER.REG_ID_CD",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "CUST_MSTR_D2C",
+      "table2": "SLS_ORD_HDR",
+      "relationship": "CUST_MSTR_D2C.CUST_NUM_ID = SLS_ORD_HDR.CUST_NUM_ID",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "PRD_MSTR_CAT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "PRD_MSTR_CAT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = PRD_MSTR_CAT.PRD_SKU_CD",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "SLS_ORD_HDR",
+      "table2": "SYS_CAL_DIM",
+      "relationship": "SLS_ORD_HDR.ORD_DT_SID = SYS_CAL_DIM.DT_SK",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "DIST_ACCT_MSTR",
+      "table2": "SLS_ORD_HDR",
+      "relationship": "DIST_ACCT_MSTR.DIST_ACCT_ID = SLS_ORD_HDR.DIST_ACCT_ID",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "SLS_ORD_DTL_LN",
+      "table2": "SLS_ORD_HDR",
+      "relationship": "SLS_ORD_DTL_LN.ORD_NO_SYS = SLS_ORD_HDR.ORD_NO_SYS",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "GL_ACCT_MSTR",
+      "table2": "GL_F_TRX_00",
+      "relationship": "GL_ACCT_MSTR.ACCT_ID_X = GL_F_TRX_00.ACCT_ID_X",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "SLS_ORD_HDR",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "SLS_ORD_HDR.ORD_NO_SYS = SLS_RTN_LOGS_V2.ORD_NO_SYS",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "GL_F_TRX_00",
+      "table2": "SYS_CAL_DIM",
+      "relationship": "GL_F_TRX_00.POST_DT_SK = SYS_CAL_DIM.DT_SK",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "PRD_CAT_DEF",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "PRD_CAT_DEF.CAT_CDE_N = PRD_MSTR_CAT.CAT_CDE_N",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "PRD_COGS_FCT",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "PRD_COGS_FCT.PRD_SKU_CD = PRD_MSTR_CAT.PRD_SKU_CD",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "CUST_MSTR_D2C",
+      "relationship": "CUST_FEEDBACK_FCT.CUST_NO_X = CUST_MSTR_D2C.CUST_NUM_ID",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "DIST_ACCT_MSTR",
+      "table2": "SLS_REP_QUOTA",
+      "relationship": "DIST_ACCT_MSTR.REG_ID_CD = SLS_REP_QUOTA.REG_ID_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "B2B_INV_AGING",
+      "table2": "DIST_ACCT_MSTR",
+      "relationship": "B2B_INV_AGING.DIST_ACCT_ID = DIST_ACCT_MSTR.DIST_ACCT_ID",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_MSTR_CAT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "PRD_MSTR_CAT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "HR_EMP_MSTR",
+      "table2": "SLS_REP_QUOTA",
+      "relationship": "HR_EMP_MSTR.EMP_ID_N = SLS_REP_QUOTA.EMP_ID_N",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_COGS_FCT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "PRD_COGS_FCT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "PRD_COGS_FCT",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = PRD_COGS_FCT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "PRD_COGS_FCT",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = PRD_COGS_FCT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_COGS_FCT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "PRD_COGS_FCT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = PRD_MSTR_CAT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "INV_WHSE_FCT",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = INV_WHSE_FCT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "SLS_ORD_DTL_LN",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "SLS_ORD_DTL_LN.ORD_NO_SYS = SLS_RTN_LOGS_V2.ORD_NO_SYS AND SLS_ORD_DTL_LN.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "FIN_OPEX_DTL",
+      "table2": "HR_EMP_MSTR",
+      "relationship": "FIN_OPEX_DTL.DEPT_CD = HR_EMP_MSTR.DEPT_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "SYS_CAL_DIM",
+      "table2": "PRD_COGS_FCT",
+      "relationship": "SYS_CAL_DIM.CAL_DT = PRD_COGS_FCT.EFF_DT AND SYS_CAL_DIM.CAL_DT = PRD_COGS_FCT.END_DT",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "SLS_ORD_HDR",
+      "table2": "B2B_INV_AGING",
+      "relationship": "SLS_ORD_HDR.ORD_NO_SYS = B2B_INV_AGING.INV_NUM_X",
+      "source": "Usage-based"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "SYS_CAL_DIM",
+      "relationship": "INV_WHSE_FCT.SNAP_DT = SYS_CAL_DIM.CAL_DT",
+      "source": "Usage-based"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition">
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Chart Name="MarginTrendChart">
+            <DataSetName>MarginTrendDataSet</DataSetName>
+            <!-- UI formatting tags omitted for brevity -->
+          </Chart>
+        </ReportItems>
+      </Body>
+    </ReportSection>
+  </ReportSections>
+  <DataSources>
+    <DataSource Name="LegacyERP">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString>Data Source=CORP-DB-01;Initial Catalog=ERP_PROD</ConnectString>
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="MarginTrendDataSet">
+      <Query>
+        <DataSourceName>LegacyERP</DataSourceName>
+        <CommandText>
+            /* 
+               Author: F. Patel (FP&amp;A)
+               Desc: Calculates True Gross Margin over time.
+               CRITICAL: COGS fluctuates (e.g. Aluminum shortages). 
+               We MUST join COGS to the exact date the order was placed.
+            */
+            SELECT 
+                cal.FISC_YR_N AS FiscalYear,
+                cal.FISC_PER_N AS FiscalPeriod,
+                prd.PRD_NM_TXT AS Product,
+                SUM(ln.QTY_N * ln.UNIT_PRC_AMT * (1 - ln.DISC_PCT_N)) AS NetRevenue,
+                SUM(ln.QTY_N * (cogs.MTL_CST_AMT + cogs.LBR_CST_AMT + cogs.TRFF_AMT)) AS TotalCOGS,
+                SUM(ln.QTY_N * ln.UNIT_PRC_AMT * (1 - ln.DISC_PCT_N)) - SUM(ln.QTY_N * (cogs.MTL_CST_AMT + cogs.LBR_CST_AMT + cogs.TRFF_AMT)) AS GrossMargin
+            FROM `l400_agentic_da.SLS_ORD_HDR` hdr
+            JOIN `l400_agentic_da.SLS_ORD_DTL_LN` ln 
+                ON hdr.ORD_NO_SYS = ln.ORD_NO_SYS
+            JOIN `l400_agentic_da.PRD_MSTR_CAT` prd 
+                ON ln.PRD_SKU_CD = prd.PRD_SKU_CD
+            JOIN `l400_agentic_da.SYS_CAL_DIM` cal 
+                ON hdr.ORD_DT_SID = cal.DT_SK
+            JOIN `l400_agentic_da.PRD_COGS_FCT` cogs 
+                ON prd.PRD_SKU_CD = cogs.PRD_SKU_CD
+                AND cal.CAL_DT &gt;= cogs.EFF_DT 
+                AND cal.CAL_DT &lt;= cogs.END_DT
+            WHERE hdr.STS_CDE = 'C'
+            GROUP BY 1, 2, 3
+        </CommandText>
+      </Query>
+      <Fields>
+        <Field Name="FiscalYear"><DataField>FiscalYear</DataField></Field>
+        <Field Name="FiscalPeriod"><DataField>FiscalPeriod</DataField></Field>
+        <Field Name="GrossMargin"><DataField>GrossMargin</DataField></Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+</Report>

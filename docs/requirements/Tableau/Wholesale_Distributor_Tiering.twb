@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<workbook original-version='18.1' source-build='2023.1.0' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <datasources>
+    <datasource caption='LegacyERP_Wholesale' inline='true' name='federated.1a2b3c'>
+      <connection class='federated'>
+        <!-- Connection details omitted -->
+      </connection>
+      
+      <!-- STANDARD COLUMNS -->
+      <column datatype='string' name='[DIST_ACCT_ID]' role='dimension' type='nominal' />
+      <column datatype='real' name='[Annual_Volume]' role='measure' type='quantitative' />
+      <column datatype='integer' name='[Distinct_Product_Categories]' role='measure' type='quantitative' />
+      <column datatype='real' name='[Avg_Days_To_Pay]' role='measure' type='quantitative' />
+
+      <!-- CALCULATED FIELD: THE GOLDEN METRIC -->
+      <column caption='Tier 1 Wholesale Distributor Flag' datatype='boolean' name='[Calculation_987654321]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [Annual_Volume] &gt; 250000 AND [Distinct_Product_Categories] &gt;= 3 AND [Avg_Days_To_Pay] &lt; 30 THEN TRUE ELSE FALSE END' />
+      </column>
+      
+    </datasource>
+  </datasources>
+</workbook>

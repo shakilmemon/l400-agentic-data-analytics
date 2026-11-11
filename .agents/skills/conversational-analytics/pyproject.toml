@@ -1,0 +1,32 @@
+[project]
+name = "conversational-analytics-dev"
+version = "0.1.0"
+description = "Dev/test/eval environment for the conversational-analytics skill"
+requires-python = ">=3.10"
+dependencies = [
+    "google-cloud-geminidataanalytics>=0.11.0",
+    "google-auth",
+    "requests",
+    "proto-plus",
+    "pyyaml",          # evals/deploy_ca_from_okf.py parses the OKF agent-def YAML
+    "pytest",
+]
+
+# The skill's code (scripts/) is the single source of truth. Tests/evals import
+# it directly via each file's own sys.path insert to ../scripts (flat modules,
+# matching the skill's documented import pattern) — no editable install needed,
+# so tests always exercise the CURRENT skill code, never a copy.
+
+[tool.pytest.ini_options]
+# tests/  = portable skill verification (public data / offline)
+# evals/  = repo-specific usage + measurement (l400-agentic-data-analytics docs/requirements/schema)
+testpaths = ["tests", "evals"]
+markers = [
+    "live: hits real Google Cloud APIs; requires ADC + CA_LIVE_TESTS=1. Creates uniquely-named resources and deletes ONLY what it created.",
+]
+addopts = "-ra"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+]

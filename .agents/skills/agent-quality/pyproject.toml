@@ -1,0 +1,22 @@
+[project]
+name = "agent-quality-dev"
+version = "0.1.0"
+description = "Dev/test/eval environment for the agent-quality trust skill"
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml",
+    "google-cloud-bigquery",   # manual grader tier
+    "pytest",
+]
+
+# The skill's code (scripts/) is the single source of truth. Tests import it via
+# a sys.path insert to ../scripts (flat modules), so tests always exercise the
+# CURRENT skill code. Vertex / bigquery-agent-analytics are NOT dev deps — those
+# tiers are exercised via injected fakes offline, and live only where installed.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "live: hits real Google Cloud APIs; requires ADC + AQ_LIVE_TESTS=1. Creates uniquely-named resources and deletes ONLY what it created.",
+]
+addopts = "-ra"

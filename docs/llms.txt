@@ -1,0 +1,23 @@
+# Conversational Analytics (NL2SQL) - System Architecture
+
+## 1. High-Level Concept & Pattern
+This project uses **Intent-Driven Engineering** and **Knowledge-as-Code** to build a Conversational Analytics (NL2SQL) agent on Google Cloud.
+
+```
+[Customer Artifacts] ──(Agent Skills)──► [Open Knowledge Format] ──(Agent Skills)──► [Google Cloud] ──► [Evaluation]
+```
+
+- **Local State (OKF):** The Open Knowledge Format (`okf/`) is the local single source of truth for all schema descriptions, glossaries, metrics, and agent rules.
+- **Two-Stage Flow:**
+  1. **Artifacts to OKF:** Agent skills parse raw customer artifacts into standardized OKF files.
+  2. **OKF to Cloud:** Agent skills forward-engineer OKF definitions directly to Google Cloud resources.
+- **Evaluation:** Deployed agents are evaluated against benchmark prompts and trace logs.
+
+---
+
+## 2. Google Cloud Services
+- **Google Cloud Storage (GCS):** Storage for raw documents and unstructured artifacts.
+- **BigQuery:** Relational analytics tables, BigLake object tables, and stored procedures.
+- **Dataplex / Knowledge Catalog:** Business glossaries, term mappings, Data Profiling, and Data Insights scans.
+- **BigQuery Conversational Analytics API:** Managed conversational analytics agent runtime.
+- **Gemini Enterprise:** Business user interface connected via OAuth / Agent-to-Agent (A2A).

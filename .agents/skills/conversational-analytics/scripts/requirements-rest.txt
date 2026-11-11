@@ -1,0 +1,6 @@
+# REST-only install — no geminidataanalytics SDK dependency.
+# For customers who standardize on REST (fewer deps to manage, security review).
+# Use with: ca.set_backend("rest") or CA_BACKEND=rest. The facade never imports
+# the SDK in this mode.
+google-auth
+requests

@@ -1,0 +1,8 @@
+# Full install (SDK + REST backends).
+#   chat / agents / context / conversations (ca_sdk, ca_rest, ca_common, ca.py)
+# For REST-only environments that avoid the geminidataanalytics SDK, use
+# requirements-rest.txt instead.
+google-cloud-geminidataanalytics>=0.11.0
+google-auth
+requests
+proto-plus

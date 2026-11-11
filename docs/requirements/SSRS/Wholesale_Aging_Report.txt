@@ -1,0 +1,1 @@
+This report contains the CONCAT join logic linking the Order Header to the B2B Invoice table.

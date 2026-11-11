@@ -1,0 +1,24 @@
+Read all the files from the following directories and specific paths:
+- docs/requirements/gemini-context.md
+- docs/requirements/Business-Requirements/
+- docs/requirements/Conversational-Analytics-Best-Practices/
+- docs/requirements/Glossary/
+- docs/requirements/Data-Dictionary/
+- docs/requirements/Legacy-SQL/*.sql
+- docs/requirements/SSRS/*.rdl
+- docs/requirements/Tableau/*.twb
+- docs/requirements/Unstructured-Data/*.md
+- okf/conversational-analytics/*.md
+- okf/references/glossary/*.md
+- okf/references/metrics/*.md
+- okf/tables/*.md
+- okf-staging/conversational-analytics/*.md
+
+Consolidate the contents of all these files into a single output file and save it to docs/requirements/gemini-context-consolidated.md. 
+
+For every file you process, you must prepend a markdown header immediately before its content that specifies the file's relative path and name, using this exact format:
+
+---
+# File: [insert-path-and-filename-here]
+---
+<<file contents>>

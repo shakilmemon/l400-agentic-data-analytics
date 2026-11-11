@@ -1,0 +1,21 @@
+# agent-quality runtime deps. Heavy deps are imported lazily, so install only
+# what your chosen path/tier needs.
+#
+# Core (always): none required to import; PyYAML for parsing acceptance OKF files.
+pyyaml
+
+# Talking to agents (acceptance + native observability) reuses the
+# conversational-analytics skill — install ITS requirements (SDK or REST-only):
+#   pip install -r ../../conversational-analytics/scripts/requirements.txt
+# (or requirements-rest.txt for the REST-only path).
+
+# MANUAL grader tier (BigQuery AI functions): grade in-warehouse.
+google-cloud-bigquery
+
+# MANAGED grader tier (Vertex Gen AI Evaluation): optional; only if you use it.
+# google-cloud-aiplatform[evaluation]
+# pandas
+# pandas-gbq            # metrics_table.to_gbq write-back
+
+# PLUGIN observability (embedded ADK agents): optional.
+# bigquery-agent-analytics[llm]

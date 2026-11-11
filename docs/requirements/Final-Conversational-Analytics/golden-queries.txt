@@ -1,0 +1,110 @@
+Golden Queries (Verified Queries)
+
+In CA, you will map these specific Natural Language prompts to these exact SQL statements. This overrides the LLM's tendency to hallucinate the complex math (Tableau) or the complex JOINs (SSRS).
+
+1. Type 1 (Metric Definition): Tier 1 Wholesale Distributor
+Prompt to Match: "How many Tier 1 Wholesale Distributors do we have?"
+The SQL:
+code
+SQL
+SELECT 
+    reg.RGN_NM_TXT AS Region,
+    COUNT(DISTINCT dist.DIST_ACCT_ID) AS Tier_1_Distributor_Count
+FROM `l400_agentic_da.DIST_ACCT_MSTR` dist
+JOIN `l400_agentic_da.GEO_REG_HIER` reg ON dist.REG_ID_CD = reg.REG_ID_CD
+JOIN `l400_agentic_da.SLS_ORD_HDR` hdr ON dist.DIST_ACCT_ID = hdr.DIST_ACCT_ID
+JOIN `l400_agentic_da.SLS_ORD_DTL_LN` ln ON hdr.ORD_NO_SYS = ln.ORD_NO_SYS
+JOIN `l400_agentic_da.PRD_MSTR_CAT` prd ON ln.PRD_SKU_CD = prd.PRD_SKU_CD
+LEFT JOIN `l400_agentic_da.B2B_INV_AGING` inv ON CONCAT('INV-', hdr.ORD_NO_SYS) = inv.INV_NUM_X
+GROUP BY dist.DIST_ACCT_ID, reg.RGN_NM_TXT
+HAVING SUM(ln.QTY_N * ln.UNIT_PRC_AMT * (1 - ln.DISC_PCT_N)) > 250000 
+   AND COUNT(DISTINCT prd.CAT_CDE_N) >= 3 
+   AND AVG(DATE_DIFF(COALESCE(inv.PAID_DT, CURRENT_DATE()), inv.ISSUE_DT, DAY)) < 30
+
+
+2. Type 1 (Metric Definition): Certified Field Tester
+Prompt to Match: "List our Certified Field Testers"
+The SQL:
+code
+SQL
+SELECT 
+    c.CUST_NUM_ID, 
+    c.F_NM, 
+    c.L_NM, 
+    c.EML_ADDR_TXT
+FROM `l400_agentic_da.CUST_MSTR_D2C` c
+JOIN `l400_agentic_da.SLS_ORD_HDR` hdr ON c.CUST_NUM_ID = hdr.CUST_NUM_ID
+JOIN `l400_agentic_da.SLS_ORD_DTL_LN` ln ON hdr.ORD_NO_SYS = ln.ORD_NO_SYS
+JOIN `l400_agentic_da.PRD_MSTR_CAT` prd ON ln.PRD_SKU_CD = prd.PRD_SKU_CD
+LEFT JOIN `l400_agentic_da.CUST_FEEDBACK_FCT` fb ON c.CUST_NUM_ID = fb.CUST_NO_X
+LEFT JOIN `l400_agentic_da.SLS_RTN_LOGS_V2` rtn ON hdr.ORD_NO_SYS = rtn.ORD_NO_SYS
+GROUP BY c.CUST_NUM_ID, c.F_NM, c.L_NM, c.EML_ADDR_TXT
+HAVING SUM(ln.QTY_N * ln.UNIT_PRC_AMT * (1 - ln.DISC_PCT_N)) > 1000
+   AND COUNT(DISTINCT prd.CAT_CDE_N) >= 3
+   AND COUNT(DISTINCT CASE WHEN DATE_DIFF(CURRENT_DATE(), fb.SUB_DT, DAY) <= 365 THEN fb.FDBK_ID_X END) >= 2
+   AND COUNT(DISTINCT CASE WHEN DATE_DIFF(CURRENT_DATE(), rtn.RTN_DT, DAY) <= 90 THEN rtn.RTN_AUTH_ID END) = 0
+
+
+3. Type 2 (Analytical Example): True Gross Margin (SCD Override)
+Prompt to Match: "What is our True Gross Margin for products?"
+The SQL: (This teaches CA how to handle the >= / <= Slowly Changing Dimension in the COGS table).
+code
+SQL
+SELECT 
+    cal.FISC_YR_N AS FiscalYear,
+    cal.FISC_QTR_N AS FiscalQuarter,
+    prd.PRD_NM_TXT AS Product,
+    SUM(ln.QTY_N * ln.UNIT_PRC_AMT * (1 - ln.DISC_PCT_N)) - SUM(ln.QTY_N * (cogs.MTL_CST_AMT + cogs.LBR_CST_AMT + cogs.TRFF_AMT)) AS GrossMargin
+FROM `l400_agentic_da.SLS_ORD_HDR` hdr
+JOIN `l400_agentic_da.SLS_ORD_DTL_LN` ln ON hdr.ORD_NO_SYS = ln.ORD_NO_SYS
+JOIN `l400_agentic_da.PRD_MSTR_CAT` prd ON ln.PRD_SKU_CD = prd.PRD_SKU_CD
+JOIN `l400_agentic_da.SYS_CAL_DIM` cal ON hdr.ORD_DT_SID = cal.DT_SK
+JOIN `l400_agentic_da.PRD_COGS_FCT` cogs 
+    ON prd.PRD_SKU_CD = cogs.PRD_SKU_CD
+    AND cal.CAL_DT >= cogs.EFF_DT 
+    AND cal.CAL_DT <= cogs.END_DT
+WHERE hdr.STS_CDE = 'C'
+GROUP BY 1, 2, 3
+
+
+4. Type 2 (Analytical Example): Wholesale Aging (String Concat Override)
+Prompt to Match: "Show me the total Amount Due for Aging Invoices broken down by Region."
+The SQL: (This teaches CA how to join the Invoice table using the CONCAT string function).
+code
+SQL
+SELECT 
+    reg.RGN_NM_TXT AS Region,
+    SUM(inv.AMT_DUE) AS Total_Aging_Amount_Due
+FROM `l400_agentic_da.DIST_ACCT_MSTR` dist
+JOIN `l400_agentic_da.GEO_REG_HIER` reg ON dist.REG_ID_CD = reg.REG_ID_CD
+JOIN `l400_agentic_da.SLS_ORD_HDR` hdr ON dist.DIST_ACCT_ID = hdr.DIST_ACCT_ID
+JOIN `l400_agentic_da.B2B_INV_AGING` inv ON CONCAT('INV-', hdr.ORD_NO_SYS) = inv.INV_NUM_X
+WHERE inv.STS_FLG = 0 
+GROUP BY 1
+
+
+5. Type 1 (Metric Definition): Blended D2C CAC
+Prompt to Match: "What is our Blended D2C Customer Acquisition Cost (CAC)?"
+The SQL:
+code
+SQL
+SELECT 
+    cal.FISC_YR_N AS FiscalYear,
+    cal.FISC_QTR_N AS FiscalQuarter,
+    (
+        SELECT SUM(AMT) 
+        FROM `l400_agentic_da.FIN_OPEX_DTL` opex
+        JOIN `l400_agentic_da.SYS_CAL_DIM` sub_cal ON opex.POST_DT = sub_cal.CAL_DT
+        WHERE opex.DEPT_CD = 'MKTG' 
+          AND sub_cal.FISC_YR_N = cal.FISC_YR_N 
+          AND sub_cal.FISC_QTR_N = cal.FISC_QTR_N
+    ) / 
+    (
+        SELECT COUNT(CUST_NUM_ID) 
+        FROM `l400_agentic_da.CUST_MSTR_D2C` cust
+        JOIN `l400_agentic_da.SYS_CAL_DIM` sub_cal ON cust.ACQ_DT = sub_cal.CAL_DT
+        WHERE sub_cal.FISC_YR_N = cal.FISC_YR_N 
+          AND sub_cal.FISC_QTR_N = cal.FISC_QTR_N
+    ) AS Blended_D2C_CAC
+FROM `l400_agentic_da.SYS_CAL_DIM` cal
+GROUP BY 1, 2

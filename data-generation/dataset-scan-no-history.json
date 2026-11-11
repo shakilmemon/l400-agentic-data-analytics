@@ -1,0 +1,188 @@
+{
+  "dataset": {
+    "name": "l400_agentic_da",
+    "description": "This dataset contains a comprehensive collection of information covering various aspects of business operations, including financial transactions, sales activities, customer interactions, product management, and human resources. It provides detailed records for analyzing sales performance, tracking inventory levels, managing customer relationships, and understanding financial expenditures. The data supports in-depth analysis of product profitability, supply chain efficiency, and overall organizational performance. This dataset is crucial for strategic decision-making, operational optimization, and financial reporting across the enterprise."
+  },
+  "relationships": [
+    {
+      "table1": "B2B_INV_AGING",
+      "table2": "DIST_ACCT_MSTR",
+      "relationship": "B2B_INV_AGING.DIST_ACCT_ID = DIST_ACCT_MSTR.DIST_ACCT_ID",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "SLS_ORD_HDR",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "SLS_ORD_HDR.ORD_NO_SYS = SLS_RTN_LOGS_V2.ORD_NO_SYS",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "SLS_ORD_DTL_LN",
+      "table2": "SLS_ORD_HDR",
+      "relationship": "SLS_ORD_DTL_LN.ORD_NO_SYS = SLS_ORD_HDR.ORD_NO_SYS",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "SLS_ORD_HDR",
+      "table2": "SYS_CAL_DIM",
+      "relationship": "SLS_ORD_HDR.ORD_DT_SID = SYS_CAL_DIM.DT_SK",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "GL_F_TRX_00",
+      "table2": "SYS_CAL_DIM",
+      "relationship": "GL_F_TRX_00.POST_DT_SK = SYS_CAL_DIM.DT_SK",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "DIST_ACCT_MSTR",
+      "table2": "GEO_REG_HIER",
+      "relationship": "DIST_ACCT_MSTR.REG_ID_CD = GEO_REG_HIER.REG_ID_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "HR_EMP_MSTR",
+      "table2": "SLS_REP_QUOTA",
+      "relationship": "HR_EMP_MSTR.EMP_ID_N = SLS_REP_QUOTA.EMP_ID_N",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "GL_ACCT_MSTR",
+      "table2": "GL_F_TRX_00",
+      "relationship": "GL_ACCT_MSTR.ACCT_ID_X = GL_F_TRX_00.ACCT_ID_X",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_CAT_DEF",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "PRD_CAT_DEF.CAT_CDE_N = PRD_MSTR_CAT.CAT_CDE_N",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "DIST_ACCT_MSTR",
+      "table2": "SLS_ORD_HDR",
+      "relationship": "DIST_ACCT_MSTR.DIST_ACCT_ID = SLS_ORD_HDR.DIST_ACCT_ID",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_MSTR_D2C",
+      "table2": "SLS_ORD_HDR",
+      "relationship": "CUST_MSTR_D2C.CUST_NUM_ID = SLS_ORD_HDR.CUST_NUM_ID",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = PRD_MSTR_CAT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "FIN_OPEX_DTL",
+      "table2": "HR_EMP_MSTR",
+      "relationship": "FIN_OPEX_DTL.DEPT_CD = HR_EMP_MSTR.DEPT_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_COGS_FCT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "PRD_COGS_FCT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_MSTR_CAT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "PRD_MSTR_CAT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "CUST_MSTR_D2C",
+      "relationship": "CUST_FEEDBACK_FCT.CUST_NO_X = CUST_MSTR_D2C.CUST_NUM_ID",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_MSTR_CAT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "PRD_MSTR_CAT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "PRD_COGS_FCT",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = PRD_COGS_FCT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_COGS_FCT",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "PRD_COGS_FCT.PRD_SKU_CD = PRD_MSTR_CAT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "PRD_COGS_FCT",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = PRD_COGS_FCT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "PRD_COGS_FCT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "PRD_COGS_FCT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "SLS_ORD_DTL_LN",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = SLS_ORD_DTL_LN.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "INV_WHSE_FCT",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "INV_WHSE_FCT.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "SLS_ORD_DTL_LN",
+      "table2": "SLS_RTN_LOGS_V2",
+      "relationship": "SLS_ORD_DTL_LN.ORD_NO_SYS = SLS_RTN_LOGS_V2.ORD_NO_SYS AND SLS_ORD_DTL_LN.PRD_SKU_CD = SLS_RTN_LOGS_V2.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "INV_WHSE_FCT",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = INV_WHSE_FCT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "CUST_FEEDBACK_FCT",
+      "table2": "PRD_MSTR_CAT",
+      "relationship": "CUST_FEEDBACK_FCT.PRD_SKU_CD = PRD_MSTR_CAT.PRD_SKU_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "DIST_ACCT_MSTR",
+      "table2": "SLS_REP_QUOTA",
+      "relationship": "DIST_ACCT_MSTR.REG_ID_CD = SLS_REP_QUOTA.REG_ID_CD",
+      "source": "LLM-inferred"
+    },
+    {
+      "table1": "SLS_RTN_LOGS_V2",
+      "table2": "SYS_CAL_DIM",
+      "relationship": "SLS_RTN_LOGS_V2.RTN_DT = SYS_CAL_DIM.CAL_DT",
+      "source": "LLM-inferred"
+    }
+  ]
+}

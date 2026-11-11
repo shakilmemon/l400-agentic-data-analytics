@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition">
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Tablix Name="Tablix1">
+            <DataSetName>WholesaleAgingDataSet</DataSetName>
+            <!-- UI formatting tags omitted for brevity -->
+          </Tablix>
+        </ReportItems>
+      </Body>
+    </ReportSection>
+  </ReportSections>
+  <DataSources>
+    <DataSource Name="LegacyERP">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString>Data Source=CORP-DB-01;Initial Catalog=ERP_PROD</ConnectString>
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="WholesaleAgingDataSet">
+      <Query>
+        <DataSourceName>LegacyERP</DataSourceName>
+        <CommandText>
+            /* 
+               Author: J. Smith (IT Dept)
+               Desc: Active aging report for wholesale distributors. 
+               Note: Invoice system prefixes 'INV-' to the ERP order number.
+            */
+            SELECT 
+                reg.RGN_NM_TXT AS Region,
+                dist.CO_NM_TXT AS Distributor,
+                hdr.ORD_NO_SYS AS OrderNumber,
+                inv.INV_NUM_X AS InvoiceNumber,
+                inv.ISSUE_DT AS InvoiceDate,
+                inv.AMT_DUE AS AmountDue,
+                DATE_DIFF(CURRENT_DATE(), inv.ISSUE_DT, DAY) AS DaysAging
+            FROM `l400_agentic_da.DIST_ACCT_MSTR` dist
+            JOIN `l400_agentic_da.GEO_REG_HIER` reg 
+                ON dist.REG_ID_CD = reg.REG_ID_CD
+            JOIN `l400_agentic_da.SLS_ORD_HDR` hdr 
+                ON dist.DIST_ACCT_ID = hdr.DIST_ACCT_ID
+            JOIN `l400_agentic_da.B2B_INV_AGING` inv 
+                ON CONCAT('INV-', hdr.ORD_NO_SYS) = inv.INV_NUM_X
+            WHERE inv.STS_FLG = 0 
+            ORDER BY DaysAging DESC
+        </CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Region"><DataField>Region</DataField></Field>
+        <Field Name="Distributor"><DataField>Distributor</DataField></Field>
+        <Field Name="AmountDue"><DataField>AmountDue</DataField></Field>
+        <Field Name="DaysAging"><DataField>DaysAging</DataField></Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+</Report>
